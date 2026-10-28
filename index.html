@@ -47,6 +47,10 @@ input:disabled,select:disabled,textarea:disabled{background:#f3f6f9;color:#54687
 .money{position:relative}
 .money>span{position:absolute;left:14px;top:12px;color:var(--muted);font-weight:600;pointer-events:none}
 .money input{padding-left:29px;font-variant-numeric:tabular-nums}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+input[type=number]{-moz-appearance:textfield;appearance:textfield}
+.daily-option{display:flex;align-items:center;gap:8px;margin-top:8px;font-weight:600;font-size:13px;color:var(--navy);cursor:pointer}.daily-option input{width:17px;height:17px;accent-color:var(--blue)}.daily-preview{font-weight:400;color:var(--muted);font-size:12px}
+.budget-preview{grid-column:1/-1;background:#f0f5fb;border:1px solid #d6e4f1;border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:14px}.budget-preview strong{font-size:17px;color:var(--navy)}
 fieldset{margin:0;padding:0;border:0;min-width:0}
 legend{padding:0;margin-bottom:10px;font-size:13px;font-weight:700}
 .choice-row{display:flex;gap:12px;flex-wrap:wrap}
@@ -89,7 +93,7 @@ input[aria-invalid=true],select[aria-invalid=true],textarea[aria-invalid=true]{b
 </div></header>
 <main class="wrap">
 <section class="hero" aria-labelledby="page-title">
-<div><div class="eyebrow">FSUSA events</div><h1 id="page-title">Submit an event budget.</h1><p class="lead">Tell us about the event, its estimated costs, and what you hope to achieve.</p></div>
+<div><div class="eyebrow">FilterShine USA Events</div><h1 id="page-title">Submit an event budget.</h1><p class="lead">Tell us about the event, its estimated costs, and what you hope to achieve.</p></div>
 <aside class="heroCard"><b>One event per request.</b><span>Have your event details and estimated expenses ready. Enter all amounts in U.S. dollars.</span></aside>
 </section>
 <div class="preview-banner" id="previewBanner"><strong>Preview only.</strong> This form is not connected yet. You can check the fields, but nothing will be sent or saved.</div>
@@ -103,28 +107,34 @@ input[aria-invalid=true],select[aria-invalid=true],textarea[aria-invalid=true]{b
 <div class="field"><label for="leadPhone">Phone number <span class="required">*</span></label><input id="leadPhone" name="leadPhone" type="tel" autocomplete="tel" maxlength="40" required placeholder="Phone number"></div>
 <div class="field full"><label for="leadEmail">Email address <span class="required">*</span></label><input id="leadEmail" name="leadEmail" type="email" autocomplete="email" maxlength="254" required placeholder="name@company.com"></div>
 <div class="field"><label for="eventName">Event name <span class="required">*</span></label><input id="eventName" name="eventName" type="text" maxlength="200" required placeholder="e.g., RFMA 2027"></div>
-<div class="field"><label for="eventLocation">Location <span class="required">*</span></label><input id="eventLocation" name="eventLocation" type="text" maxlength="250" required placeholder="City, state, and venue"></div>
-<div class="field"><label for="eventDate">Event date <span class="required">*</span></label><input id="eventDate" name="eventDate" type="date" min="2000-01-01" max="9999-12-31" required aria-describedby="eventDateHelp"><p class="helper" id="eventDateHelp">For a multi-day event, use the first day.</p></div>
-<div class="field"><label for="attendeeCount">Number of attendees <span class="required">*</span></label><input id="attendeeCount" name="attendeeCount" type="number" inputmode="numeric" min="1" max="10000" step="1" required placeholder="0" data-integer aria-describedby="attendeeHelp"><p class="helper" id="attendeeHelp">How many people will FSUSA send?</p></div>
+<div class="field"><label for="eventLocation">Location <span class="required">*</span></label><input id="eventLocation" name="eventLocation" type="text" maxlength="250" required placeholder="City and state"></div>
+<div class="field"><label for="eventVenue">Venue <span class="required">*</span></label><input id="eventVenue" name="eventVenue" type="text" maxlength="200" required placeholder="Convention center, hotel, or event venue"></div>
+<div class="field"><label for="eventStartDate">Event start date <span class="required">*</span></label><input id="eventStartDate" name="eventStartDate" type="date" required></div>
+<div class="field"><label for="eventEndDate">Event end date <span class="required">*</span></label><input id="eventEndDate" name="eventEndDate" type="date" required><p class="helper" id="daysHelp">Event duration: select both dates.</p></div>
+<div class="field full"><label for="attendeeNames">Names of FSUSA representatives attending <span class="required">*</span></label><textarea id="attendeeNames" name="attendeeNames" maxlength="1500" rows="2" required placeholder="e.g., Name 1, Name 2, Name 3"></textarea><p class="helper">List everyone attending on behalf of FSUSA, separated by commas.</p></div>
+<div class="field"><label for="paidAttendeeCount">Number of attendees FSUSA is paying for <span class="required">*</span></label><input id="paidAttendeeCount" name="paidAttendeeCount" type="number" inputmode="numeric" min="0" max="10000" step="1" required placeholder="0" data-integer aria-describedby="attendeeHelp"><p class="helper" id="attendeeHelp">Include only people whose registration and/or travel expenses FSUSA will cover.</p></div>
 </div></section>
 <section class="panel" aria-labelledby="expense-title">
-<div class="panelhead"><div><div class="kicker">STEP 2</div><h2 id="expense-title">Event expenses</h2><p class="section-description">Use total event costs, except when registration is charged per person.</p></div><span class="section-tag">All amounts in USD</span></div>
+<div class="panelhead"><div><div class="kicker">STEP 2</div><h2 id="expense-title">Event expenses</h2><p class="section-description">Enter full-event costs. For eligible items, check “Per day” if the amount repeats every event day.</p></div><span class="section-tag">All amounts in USD</span></div>
 <div class="fields">
 <div class="field"><label for="registrationBasis">Registration fee basis <span class="required">*</span></label><select id="registrationBasis" name="registrationBasis" required><option value="">Select one</option><option value="Per person">Per person</option><option value="Per company">Per company</option></select></div>
-<div class="field"><label for="registrationFee"><span id="registrationLabel">Registration fee</span> <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="registrationFee" name="registrationFee" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" value="0.00" required data-money aria-describedby="registrationHelp"></div><p class="helper" id="registrationHelp">Choose whether this is a per-person or company fee.</p></div>
-<div class="field"><label for="boothAndSupplies">Booth cost and supplies <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="boothAndSupplies" name="boothAndSupplies" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" value="0.00" required data-money></div></div>
-<div class="field"><label for="avFee">A/V fee (if any) <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="avFee" name="avFee" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" value="0.00" required data-money></div></div>
-<div class="field"><label for="marketingMaterials">Marketing materials cost <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="marketingMaterials" name="marketingMaterials" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" value="0.00" required data-money></div></div>
-<div class="field"><label for="shipping">Shipping (materials &amp; equipment) <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="shipping" name="shipping" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" value="0.00" required data-money></div></div>
-<div class="field"><label for="food">Food cost <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="food" name="food" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" value="0.00" required data-money></div></div>
+<div class="field"><label for="registrationFee"><span id="registrationLabel">Registration fee</span> <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="registrationFee" name="registrationFee" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" placeholder="0.00" data-money aria-describedby="registrationHelp"></div><p class="helper" id="registrationHelp">Choose whether this is a per-person or company fee.</p></div>
+<div class="field"><label for="boothAndSupplies">Booth cost and supplies <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="boothAndSupplies" name="boothAndSupplies" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" placeholder="0.00" data-money></div></div>
+<div class="field"><label for="avFee">A/V fee (if any) <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="avFee" name="avFee" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" placeholder="0.00" data-money></div></div>
+<div class="field"><label for="marketingMaterials">Marketing materials cost <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="marketingMaterials" name="marketingMaterials" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" placeholder="0.00" data-money></div></div>
+<div class="field"><label for="shipping">Shipping (materials &amp; equipment) <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="shipping" name="shipping" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" placeholder="0.00" data-money></div></div>
+<div class="field"><label for="food">Food cost <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="food" name="food" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" placeholder="0.00" data-money></div><label class="daily-option"><input type="checkbox" id="foodDaily" aria-label="Multiply food expense by event days"> Per day <span class="daily-preview" id="foodPreview"></span></label></div>
+<div class="field"><label for="otherCost">Other cost <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="otherCost" name="otherCost" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" placeholder="0.00" data-money></div><label class="daily-option"><input type="checkbox" id="otherCostDaily" aria-label="Multiply other expense by event days"> Per day <span class="daily-preview" id="otherCostPreview"></span></label></div>
+<div class="field full"><label for="otherDescription">Other expense description</label><textarea id="otherDescription" name="otherDescription" maxlength="500" rows="2" placeholder="Describe the other expense, if applicable"></textarea></div>
 </div></section>
 <section class="panel" aria-labelledby="travel-title">
-<div class="panelhead"><div><div class="kicker">STEP 3</div><h2 id="travel-title">Travel</h2><p class="section-description">Enter totals for all attendees for the full event, not per-person or nightly rates.</p></div><span class="section-tag">All amounts in USD</span></div>
+<div class="panelhead"><div><div class="kicker">STEP 3</div><h2 id="travel-title">Travel</h2><p class="section-description">Enter estimated travel costs per person covered by FSUSA, not totals for all attendees. Amounts are multiplied by the number FSUSA is paying for. Check “Per day” when applicable; hotel uses the number of hotel nights.</p></div><span class="section-tag">All amounts in USD</span></div>
 <div class="fields">
-<div class="field"><label for="flight">Flight <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="flight" name="flight" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" value="0.00" required data-money></div></div>
-<div class="field"><label for="hotel">Hotel <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="hotel" name="hotel" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" value="0.00" required data-money></div></div>
-<div class="field"><label for="transportation">Transportation <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="transportation" name="transportation" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" value="0.00" required data-money></div></div>
-<div class="field"><label for="travelMiscellaneous">Miscellaneous <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="travelMiscellaneous" name="travelMiscellaneous" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" value="0.00" required data-money></div></div>
+<div class="field"><label for="flight">Flight per person <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="flight" name="flight" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" placeholder="0.00" data-money></div></div>
+<div class="field"><label for="hotel">Hotel per person <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="hotel" name="hotel" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" placeholder="0.00" data-money></div><label class="daily-option"><input type="checkbox" id="hotelDaily" aria-label="Multiply hotel expense by hotel nights"> Per night <span class="daily-preview" id="hotelPreview"></span></label></div>
+<div class="field"><label for="transportation">Transportation per person <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="transportation" name="transportation" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" placeholder="0.00" data-money></div><label class="daily-option"><input type="checkbox" id="transportationDaily" aria-label="Multiply transportation expense by event days"> Per day <span class="daily-preview" id="transportationPreview"></span></label></div>
+<div class="field"><label for="travelMiscellaneous">Miscellaneous travel per person <span class="required">*</span></label><div class="money"><span aria-hidden="true">$</span><input id="travelMiscellaneous" name="travelMiscellaneous" type="number" inputmode="decimal" min="0" max="99999999.99" step="0.01" placeholder="0.00" data-money></div><label class="daily-option"><input type="checkbox" id="travelMiscellaneousDaily" aria-label="Multiply travelMiscellaneous expense by event days"> Per day <span class="daily-preview" id="travelMiscellaneousPreview"></span></label></div>
+<div class="field"><label for="hotelNights">Number of hotel nights <span class="required">*</span></label><input id="hotelNights" name="hotelNights" type="number" inputmode="numeric" min="0" max="366" step="1" required placeholder="0" data-integer><p class="helper">Used only when hotel is marked Per night. Enter 0 if no overnight stay.</p></div>
 </div></section>
 <section class="panel" aria-labelledby="deposit-title">
 <div class="panelhead"><div><div class="kicker">STEP 4</div><h2 id="deposit-title">Deposit</h2></div></div>
@@ -145,6 +155,7 @@ input[aria-invalid=true],select[aria-invalid=true],textarea[aria-invalid=true]{b
 <div class="field"><label for="targetConversations">How many conversations are you aiming to have? <span class="required">*</span></label><input id="targetConversations" name="targetConversations" type="number" inputmode="numeric" min="0" max="1000000" step="1" required placeholder="0" data-integer></div>
 <div class="field"><label for="targetLeads">How many leads are you aiming to get? <span class="required">*</span></label><input id="targetLeads" name="targetLeads" type="number" inputmode="numeric" min="0" max="1000000" step="1" required placeholder="0" data-integer></div>
 </div></section>
+<div class="budget-preview" aria-live="polite"><span>Estimated total event budget</span><strong id="liveBudgetTotal">$0.00</strong></div>
 <div class="summary"><div><strong>Ready to submit?</strong><small>Check the event details, estimates, and goals before sending.</small></div><button class="submit" id="submitButton" type="submit" disabled>Check form (preview)</button></div>
 <p class="notice" id="submitNotice">Preview only. Checking this form will not submit a budget or send an email.</p>
 <div class="message" id="formMessage" role="status" aria-live="polite" tabindex="-1" hidden></div>
@@ -183,15 +194,15 @@ input[aria-invalid=true],select[aria-invalid=true],textarea[aria-invalid=true]{b
  * This form does not provide authentication or rate limiting.
  */
 const POWER_AUTOMATE_URL = 'https://defaultb0736d61e7174e03ae05313d5f0407.62.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/24/workflows/255a941de0004426a6d855795fa929e0/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=13YZNedkgrqVlNMWjfF5VTqsUAoW8qG192FpN-kmvvo';
-const LIVE_SUBMISSIONS = true;
-const FORM_VERSION = 'fsusa-event-budget-v1';
+const LIVE_SUBMISSIONS = true; // Keep preview-only until Excel, script and flow accept the new fields.
+const FORM_VERSION = 'fsusa-event-budget-v3';
 const form = document.getElementById('eventForm');
 const button = document.getElementById('submitButton');
 const message = document.getElementById('formMessage');
 const byId = id => document.getElementById(id);
 const moneyInputs = [...form.querySelectorAll('[data-money]')];
 const countInputs = [...form.querySelectorAll('[data-integer]')];
-const eventCostFields = ['boothAndSupplies','avFee','marketingMaterials','shipping','food'];
+const eventCostFields = ['boothAndSupplies','avFee','marketingMaterials','shipping','food','otherCost'];
 const travelCostFields = ['flight','hotel','transportation','travelMiscellaneous'];
 let submitting = false;
 let submitted = false;
@@ -216,7 +227,8 @@ byId('submitNotice').textContent = isLive
 // Work in whole cents for addition and multiplication.
 function centsOf(input) {
   const raw = input.value.trim();
-  if (!raw || input.validity.badInput || !/^(?:\d+(?:\.\d{0,2})?|\.\d{1,2})$/.test(raw)) return null;
+  if (!raw) return 0;
+  if (input.validity.badInput || !/^(?:\d+(?:\.\d{0,2})?|\.\d{1,2})$/.test(raw)) return null;
   const parts = raw.split('.');
   const cents = Number(parts[0] || '0') * 100 + Number((parts[1] || '').padEnd(2,'0'));
   return Number.isSafeInteger(cents) && cents >= 0 ? cents : null;
@@ -238,7 +250,7 @@ function updateRegistration() {
   byId('registrationLabel').textContent = basis === 'Per person' ? 'Registration fee per person'
     : basis === 'Per company' ? 'Registration fee per company' : 'Registration fee';
   byId('registrationHelp').textContent = basis === 'Per person'
-    ? 'This rate will be multiplied by the number of FSUSA attendees above.'
+    ? 'This rate will be multiplied by the number of attendees FSUSA is paying for.'
     : basis === 'Per company' ? 'Enter one total registration fee for the company.'
     : 'Choose whether this is a per-person or company fee.';
 }
@@ -263,7 +275,8 @@ function showMessage(text, kind) {
   message.focus({preventScroll:true});
   message.scrollIntoView({behavior:'auto',block:'nearest'});
 }
-byId('registrationBasis').addEventListener('change',updateRegistration);
+byId('registrationBasis').addEventListener('change',()=>{updateRegistration();updateBudgetPreview();});
+for(const id of ['eventStartDate','eventEndDate'])byId(id).addEventListener('change',updateBudgetPreview);
 for (const input of form.querySelectorAll('[name="depositRequired"]')) input.addEventListener('change',updateDeposit);
 form.addEventListener('invalid', event => {
   event.target.setAttribute('aria-invalid','true');
@@ -274,40 +287,79 @@ form.addEventListener('input', event => {
   if (input.matches('[data-integer]')) validateCount(input);
   input.removeAttribute('aria-invalid');
   if (!submitted && !submitting) hideMessage();
+  updateBudgetPreview();
 });
-form.addEventListener('change', () => { if (!submitted && !submitting) hideMessage(); });
+form.addEventListener('change', () => { if (!submitted && !submitting) hideMessage(); updateBudgetPreview(); });
 
+function eventDays() {
+  const a=byId('eventStartDate').value, b=byId('eventEndDate').value;
+  if (!a || !b) return null;
+  const start=Date.parse(a+'T00:00:00Z'), end=Date.parse(b+'T00:00:00Z');
+  if (!Number.isFinite(start) || !Number.isFinite(end) || end<start) return null;
+  const days=Math.round((end-start)/86400000)+1;
+  return days > 0 && days <= 366 ? days : null;
+}
+function validateDates() {
+  const start=byId('eventStartDate'), end=byId('eventEndDate');
+  end.min=start.value || '';
+  end.setCustomValidity(start.value && end.value && !eventDays()
+    ? 'End date must be on or after the start date, within 366 days.' : '');
+  const days=eventDays();
+  byId('daysHelp').textContent=days===null?'Enter a valid start and end date.':`${days} event day${days===1?'':'s'} (inclusive).`;
+}
+function amountCents(id) {
+  const entered=centsOf(byId(id));
+  if (entered===null) return 0;
+  const daily=byId(id+'Daily');
+  return daily?.checked ? entered*(id==='hotel' ? (Number(byId('hotelNights').value)||0) : (eventDays()||1)) : entered;
+}
+function updateBudgetPreview(){
+  validateDates();
+  const days=eventDays();
+  const registration=(centsOf(byId('registrationFee'))||0)*(byId('registrationBasis').value==='Per person'?(Number(byId('paidAttendeeCount').value)||0):1);
+  const covered=Number(byId('paidAttendeeCount').value)||0;
+  const total=eventCostFields.reduce((sum,id)=>sum+amountCents(id),registration)+travelCostFields.reduce((sum,id)=>sum+amountCents(id)*covered,0);
+  byId('liveBudgetTotal').textContent=(total/100).toLocaleString('en-US',{style:'currency',currency:'USD'});
+  for(const id of ['food','hotel','transportation','travelMiscellaneous','otherCost']){
+    const el=byId(id+'Preview');
+    if(el) el.textContent=byId(id+'Daily').checked ? (id==='hotel' ? `(× ${byId('hotelNights').value||'?'} nights × ${byId('paidAttendeeCount').value||'?'} people)` : `(× ${days??'?'} day${days===1?'':'s'}${travelCostFields.includes(id)?' × '+(byId('paidAttendeeCount').value||'?')+' people':''})`) : '';
+  }
+}
 function collectDetails() {
   const details = {formVersion:FORM_VERSION,currency:'USD'};
-  for (const id of ['leadName','leadPhone','leadEmail','eventName','eventLocation','eventDate',
-    'eventPurpose','eventObjectives','targetAudience']) details[id] = byId(id).value.trim();
-  for (const id of ['attendeeCount','targetConversations','targetLeads']) details[id] = Number(byId(id).value);
-  details.registrationBasis = byId('registrationBasis').value;
-  details.registrationFee = centsOf(byId('registrationFee')) / 100;
-  details.registrationQuantity = details.registrationBasis === 'Per person' ? details.attendeeCount : 1;
-  const registrationCents = centsOf(byId('registrationFee')) * details.registrationQuantity;
-  details.registrationTotal = registrationCents / 100;
-  let eventCents = registrationCents;
-  let travelCents = 0;
-  for (const id of eventCostFields) {
-    const cents = centsOf(byId(id));
-    details[id] = cents / 100;
-    eventCents += cents;
+  for (const id of ['leadName','leadPhone','leadEmail','eventName','eventLocation','eventVenue',
+    'eventStartDate','eventEndDate','attendeeNames','otherDescription','eventPurpose','eventObjectives','targetAudience']) details[id]=byId(id).value.trim();
+  details.eventDate=details.eventStartDate; // Legacy start-date column; update the flow for the new fields.
+  details.eventDays=eventDays();
+  for (const id of ['paidAttendeeCount','hotelNights','targetConversations','targetLeads']) details[id]=Number(byId(id).value);
+  details.attendeeCount=details.paidAttendeeCount; // Legacy column stores paid attendees for compatibility.
+  details.registrationBasis=byId('registrationBasis').value;
+  details.registrationFee=centsOf(byId('registrationFee'))/100;
+  details.registrationQuantity=details.registrationBasis==='Per person'?details.attendeeCount:1;
+  const registrationCents=centsOf(byId('registrationFee'))*details.registrationQuantity;
+  details.registrationTotal=registrationCents/100;
+  let eventCents=registrationCents,travelCents=0;
+  for(const id of [...eventCostFields,...travelCostFields]){
+    const daily=byId(id+'Daily');
+    if(daily){
+      details[id+'Entered']=centsOf(byId(id))/100;
+      details[id+'IsDaily']=daily.checked;
+    }
+    // Existing cost keys represent the total cost over the entire event.
+    const rawCents=amountCents(id);
+    details[id]=eventCostFields.includes(id)?rawCents/100:rawCents*details.paidAttendeeCount/100;
+    if(eventCostFields.includes(id))eventCents+=rawCents;else travelCents+=rawCents*details.paidAttendeeCount;
   }
-  for (const id of travelCostFields) {
-    const cents = centsOf(byId(id));
-    details[id] = cents / 100;
-    travelCents += cents;
-  }
-  details.eventExpenseSubtotal = eventCents / 100;
-  details.travelSubtotal = travelCents / 100;
-  details.totalBudget = (eventCents + travelCents) / 100;
-  details.depositRequired = byId('depositYes').checked ? 'Yes' : 'No';
-  details.depositDueDate = details.depositRequired === 'Yes' ? byId('depositDueDate').value : '';
-  details.depositAmount = details.depositRequired === 'Yes' ? centsOf(byId('depositAmount')) / 100 : 0;
-  // Deposit is deliberately excluded from totalBudget (it is already part of costs).
+  details.flightEntered=centsOf(byId('flight'))/100;
+  details.eventExpenseSubtotal=eventCents/100;
+  details.travelSubtotal=travelCents/100;
+  details.totalBudget=(eventCents+travelCents)/100;
+  details.depositRequired=byId('depositYes').checked?'Yes':'No';
+  details.depositDueDate=details.depositRequired==='Yes'?byId('depositDueDate').value:'';
+  details.depositAmount=details.depositRequired==='Yes'?centsOf(byId('depositAmount'))/100:0;
   return details;
 }
+
 function makeReference() {
   if (globalThis.crypto && typeof globalThis.crypto.randomUUID === 'function') {
     return 'FSUSA-EVT-' + globalThis.crypto.randomUUID();
@@ -322,6 +374,8 @@ form.addEventListener('submit', async event => {
   }
   moneyInputs.forEach(validateMoney);
   countInputs.forEach(validateCount);
+  validateDates();
+  byId('otherDescription').required=Number(byId('otherCost').value)>0;
   if (!form.reportValidity()) return;
   const details = collectDetails();
   if (!isLive) {
@@ -369,6 +423,7 @@ form.addEventListener('submit', async event => {
 });
 updateRegistration();
 updateDeposit();
+updateBudgetPreview();
 </script>
 </body>
 </html>
